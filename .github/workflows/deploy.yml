@@ -47,8 +47,7 @@ jobs:
         username: ${{ secrets.VM_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          echo "${{ secrets.YC_SA_KEY }}" > /tmp/key.json
-          docker login --username json_key --password-stdin cr.yandex < /tmp/key.json
+          echo '${{ secrets.YC_SA_KEY }}' | docker login --username json_key --password-stdin cr.yandex
           docker pull cr.yandex/${{ secrets.REGISTRY_ID }}/my-app:${{ github.sha }}
           docker stop my-app || true
           docker rm my-app || true
@@ -58,4 +57,3 @@ jobs:
             -p 80:80 \
             -e VERSION="${{ github.sha }}" \
             cr.yandex/${{ secrets.REGISTRY_ID }}/my-app:${{ github.sha }}
-          rm /tmp/key.json
